@@ -1,6 +1,8 @@
-### OpenEnergyMonitor VirtualSmartGrid
+### VirtualSmartGrid
 
 Open source virtual smart grid renewable energy aggregation and sharing concept with a focus on carbon metrics.
+
+Contributors: Trystan Lea and Dominic Zapaman
 
 ### Licence
 
