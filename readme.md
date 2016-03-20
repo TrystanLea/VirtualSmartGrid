@@ -1,10 +1,11 @@
-### VirtualSmartGrid
+## VirtualSmartGrid
 
 Open source virtual smart grid renewable energy aggregation and sharing concept with a focus on carbon metrics.
 
 ![smartgridtest.png](images/smartgridtest.png)
 
-**Rationale**
+### Rationale
+
 A key challenge in developing zero carbon energy systems is matching variable renewable supply with energy demand, including traditional electricity demand and the additional demand resulting from the electrification of heating and transport.
 
 The ZeroCarbonBritain report and 10 year, hourly energy model provides a thoroughly worked out example of how a 100% zero carbon energy system could be possible. Demand is met through a mix of demand shifting, storage technologies at different scales and oversupply.
@@ -28,5 +29,6 @@ The software contained in this repository to produce the virtual microgrid dashb
 
 This software is licenced under the Free and Open Source software Gnu Affero General Public Licence.
 
-Contributors: Trystan Lea and Dominic McCann. 
+Contributors: Trystan Lea and Dominic McCann.
+
 Organisations: OpenEnergyMonitor and Carbon Coop
