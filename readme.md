@@ -12,6 +12,10 @@ The ZeroCarbonBritain report and 10 year, hourly energy model provides a thoroug
 
 This virtual micro-grid dashboard concept aims to make it possible to test scenarios such as ZeroCarbonBritain and interim scenarios where the grid is not fully zero carbon in real-time now using data from participating households and national grid supply data. The implications of variable supply and assumptions around how shift-able demand can be can be tested and cross checked with what the models suggest could be possible.
 
+- [OpenEnergyMonitor: Household Zero Carbon Energy Model & Context](https://openenergymonitor.org/energymodel/#introduction)
+- [ZeroCarbonBritain Report and Model](http://zerocarbonbritain.org/)
+- [ZeroCarbonBritain Web Models and link to spreadsheet model download](http://zerocarbonbritain.org/energy_model/other)
+
 ### Features
 
 - Realtime and historic aggregation of household onsite solar and consumption data
