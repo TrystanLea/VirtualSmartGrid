@@ -2,7 +2,16 @@
 
 Open source virtual smart grid renewable energy aggregation and sharing concept with a focus on carbon metrics.
 
-Contributors: Trystan Lea and Dominic McCann
+![smartgridtest.png](images/smartgridtest.png)
+
+Contributors: Trystan Lea and Dominic McCann. 
+Organisations: OpenEnergyMonitor and Carbon Coop
+
+### Features
+
+### Architecture 
+
+The software contained in this repository to produce the virtual microgrid dashboard fetches household solar and consumption data from participating user accounts on emoncms.org. It makes a local cached copy in order to provide a faster loading time and browsing experience. Emoncms.org is also open source, the source code can be found here [http://github.com/emoncms/emoncms](http://github.com/emoncms/emoncms/). The UK grid mix data is loaded from the ukgrid tool which needs to be running on the same server, the source code for which can be found here: [https://github.com/TrystanLea/ukgrid](https://github.com/TrystanLea/ukgrid).
 
 ### Licence
 
