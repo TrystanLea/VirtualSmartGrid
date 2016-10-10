@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Solar Aggregation</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="lib/skeleton/css/normalize.css">
+  <link rel="stylesheet" href="lib/skeleton/css/skeleton.css">
+  <link rel="icon" type="lib/skeleton/image/png" href="images/favicon.png">
+  
+  <script language="javascript" type="text/javascript" src="lib/jquery-1.11.3.min.js"></script>
+  <script language="javascript" type="text/javascript" src="lib/flot/jquery.flot.min.js"></script>
+  <script language="javascript" type="text/javascript" src="lib/flot/jquery.flot.selection.min.js"></script>
+  <script language="javascript" type="text/javascript" src="lib/flot/jquery.flot.time.min.js"></script>
+  <script language="javascript" type="text/javascript" src="lib/vis.helper.js"></script>
+
+  <style>
+      button {
+          padding: 0 18px;
+      }
+  </style>
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container" style="text-align:center">
+    <section class="header" style="margin-top: 10%">
+        <h1>Solar Aggregation</h1>
+    </section>
+    
+    <div class="row" style="text-align:center">
+        <p>Concept example of aggregating solar generation feeds from multiple emoncms.org accounts.</p>
+        
+        <button class='time visnav' type='button' time='1'>DAY</button>
+        <button class='time' type='button' time='7'>WEEK</button>
+        <button class='time' type='button' time='30'>MONTH</button>
+        <button class='time' type='button' time='365'>YEAR</button>
+        <button id='zoomin' >ZOOM IN</button>
+        <button id='zoomout' >ZOOM OUT</button>
+        <button id='left' >LEFT</button>
+        <button id='right' >RIGHT</button>
+            
+        <br>
+        <div id="placeholder_bound">
+              <div id="placeholder"></div>
+        </div>
+        
+        <br><br>
+        <p>This is part of the OpenEnergyMonitor virtual smart grid initiative. Crucial to getting right the transition to the zero-carbon energy system is taking a step back and looking at the wider view beyond the boundary of the home: how efficient building fabric, electrified heating and transport link together and match supply from renewable energy both on-site and from further afield.</p>
+        <p>Aggregation of renewable supply and demand across a number of sites can be one important method of increasing the degree of supply/demand matching in the system. Not everyone boils a kettle at the same time or a cloud passing over one households solar pv system may not be passing over another.</p><p>The example above aggregates one component of this system: solar PV generation across a number of households.</p>
+        
+        <p><a href="https://openenergymonitor.org">OpenEnergyMonitor</a></p>
+    </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
+
+
+<script>
+var path = "https://openenergymonitor.org/dev/smartgrid/";
+
+var timeWindow = (3600000*24.0*1);
+var interval = 60;
+var intervalms = interval * 1000;
+
+view.end = +new Date;
+view.end = Math.floor(view.end / intervalms) * intervalms;
+view.start = view.end - timeWindow;
+view.start = Math.floor(view.start / intervalms) * intervalms;
+
+$('#placeholder').width($('#placeholder_bound').width());
+$('#placeholder_bound').height($('#placeholder_bound').width()*0.45);
+$('#placeholder').height($('#placeholder_bound').width()*0.45);
+
+var options = {
+    series: { lines: { show: true, fill:true } },
+    xaxis: { min: view.start, max: view.end, mode: "time", timezone: "browser" },
+    selection: { mode: "x" },
+    legend: {position: "nw"}
+};
+var series = [];
+    
+load();
+
+function load() {
+
+    var npoints = 1000;
+    interval = ((view.end - view.start) * 0.001) / npoints;
+    interval = view.round_interval(interval);
+    var intervalms = interval * 1000;
+    view.end = Math.floor(view.end / intervalms) * intervalms;
+    view.start = Math.floor(view.start / intervalms) * intervalms;
+
+    var data = getdata("aggregation",view.start,view.end,interval,0,0);
+
+    for (var z in data) {
+        if (data[z][1]<0) data[z][1]=0;
+    }
+    
+    series = [];
+    series.push({label:"solar", data:data,yaxis:1});
+
+    draw();
+}
+
+function draw() {
+    options.xaxis.min = view.start;
+    options.xaxis.max = view.end;
+    $.plot("#placeholder",series, options);
+}
+
+$("#zoomout").click(function () {view.zoomout(); load();});
+$("#zoomin").click(function () {view.zoomin(); load();});
+$('#right').click(function () {view.panright(); load();});
+$('#left').click(function () {view.panleft(); load();});
+$('.time').click(function () {view.timewindow($(this).attr("time")); load();});
+
+$('#placeholder').bind("plotselected", function (event, ranges) {
+    view.start = ranges.xaxis.from;
+    view.end = ranges.xaxis.to;
+    load();
+});
+
+$(window).resize(function(){
+    $('#placeholder').width($('#placeholder_bound').width());
+    $('#placeholder_bound').height($('#placeholder_bound').width()*0.6);
+    $('#placeholder').height($('#placeholder_bound').width()*0.6);
+    draw();
+});
+
+function getdata(feedid,start,end,interval,skipmissing,limitinterval)
+{
+    var data = [];
+    $.ajax({                                      
+        url: path+"data",                      
+        data: "id="+feedid+"&start="+start+"&end="+end+"&interval="+interval+"&skipmissing="+skipmissing+"&limitinterval="+limitinterval,
+        dataType: 'json',
+        async: false,                      
+        success: function(data_in) { data = data_in; } 
+    });
+    return data;
+}
+</script>
+
